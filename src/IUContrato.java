@@ -3,7 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package IU;
+
+
+import agenciasisii.Conexion;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -12,11 +18,17 @@ package IU;
 public class IUContrato extends javax.swing.JFrame {
 
     boolean nuevo = false;
+    Conexion connec;
     /**
      * Creates new form IUContrato
      */
-    public IUContrato() {
+    public IUContrato(Conexion con) {
         initComponents();
+        this.connec = con;
+    }
+
+    private IUContrato() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -90,6 +102,11 @@ public class IUContrato extends javax.swing.JFrame {
         jLabel12.setText("Descripcion");
 
         jButton1.setText("Aceptar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Cancelar");
 
@@ -193,6 +210,16 @@ public class IUContrato extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField4ActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            // TODO add your handling code here:
+
+            insertar();
+        } catch (SQLException ex) {
+            Logger.getLogger(IUContrato.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -255,10 +282,22 @@ public class IUContrato extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField8;
     // End of variables declaration//GEN-END:variables
 
-    private void insertar(){
+    private void insertar() throws SQLException{
     
         if(!nuevo){
-        
+            
+            String nombre = jTextField1.getText().toString() + jTextField2.getText().toString();
+            String direccion = jTextField3.getText().toString();
+            
+            String consulta  = "SELECT insertarEmpleado('" + nombre + "', "+ "1" + ", '" + direccion + "');";
+
+            //.resultado(consulta);
+            
+            ResultSet res = 
+            connec.resultado(consulta);
+            res.next();
+            
+                    
         }
     }
 }

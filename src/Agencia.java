@@ -13,20 +13,23 @@ import java.util.GregorianCalendar;
  * @author gunnar
  */
 class Agencia {
+     Conexion conexion ; 
 
     public Contrato nuevoContrato() {
-
-        Contrato contrato=new Contrato();
+        conexion = new Conexion();
+        conexion.conectar();
+        Contrato contrato=new Contrato(conexion);
         boolean id = contrato.llenar(1, 1, 1600, new GregorianCalendar(2016, 12, 12), new GregorianCalendar(2017, 12, 12), new GregorianCalendar(2016, 12, 10), "descripcion");
 
-        Conexion conexion = new Conexion();
         
-        conexion.conectar();
         
-        conexion.insertar("insert into contrato values (1 ,1, 1, 5600, '22/12/16', '22/12/17', '19/12/16', 'Desc')");
+        
+        
+       // conexion.insertar("insert into contrato values (1 ,1, 1, 5600, '22/12/16', '22/12/17', '19/12/16', 'Desc')");
         
         
         return contrato;
     }
+    
     
 }

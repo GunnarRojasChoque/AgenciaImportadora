@@ -1,4 +1,5 @@
 
+import agenciasisii.Conexion;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -26,9 +27,12 @@ class Contrato {
   private GregorianCalendar fecha_actual;
   
   private String descripcion;
-  
-  public Contrato(){
-  
+  Conexion con;
+  public Contrato(Conexion con){
+      this.con=con;
+      IUContrato iuc = new IUContrato(con);
+      
+      iuc.setVisible(true);
   }
 
     public Contrato(long id_empleado, long id_empleado_cargo, long salario, GregorianCalendar fecha_inicio, GregorianCalendar fecha_fin, GregorianCalendar fecha_actual, String descripcion) {
@@ -52,7 +56,9 @@ class Contrato {
         this.fecha_actual = fecha_actual;
         this.descripcion = descripcion;
         
-        String sql="";
+       
+//        String sql="select insertarEmpleado( )";
+//        con.resultado(sql)
         long id=1;
         return true;
     }
