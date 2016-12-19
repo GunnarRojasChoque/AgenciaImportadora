@@ -1,5 +1,6 @@
-package agenciasisii;
 
+
+        
 public class AgenciaSisII {
 
     /**
@@ -7,6 +8,9 @@ public class AgenciaSisII {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        
+        Agencia agencia=new Agencia();
+        agencia.nuevoContrato();
     }
     
 }
