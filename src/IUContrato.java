@@ -6,10 +6,13 @@
 
 
 import agenciasisii.Conexion;
+import java.awt.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.ComboBox;
 
 /**
  *
@@ -19,16 +22,29 @@ public class IUContrato extends javax.swing.JFrame {
 
     boolean nuevo = false;
     Conexion connec;
+    Component cm = new Component() {};
+    ArrayList<Integer> lsPais = new ArrayList<>();
+    ArrayList<Integer> lsCargo = new ArrayList<>();
+    
     /**
      * Creates new form IUContrato
      */
     public IUContrato(Conexion con) {
-        initComponents();
-        this.connec = con;
+        try {
+            initComponents();
+            this.connec = con;
+            getPaises();
+            getCargos();
+        } catch (SQLException ex) {
+            Logger.getLogger(IUContrato.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
-    private IUContrato() {
+    private IUContrato() throws SQLException {
+        getPaises();
+
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
     }
 
     /**
@@ -76,6 +92,11 @@ public class IUContrato extends javax.swing.JFrame {
         jLabel4.setText("Pais");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jLabel5.setText("Direccion");
 
@@ -215,10 +236,15 @@ public class IUContrato extends javax.swing.JFrame {
             // TODO add your handling code here:
 
             insertar();
+            insertarContrato();
         } catch (SQLException ex) {
             Logger.getLogger(IUContrato.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -250,7 +276,11 @@ public class IUContrato extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new IUContrato().setVisible(true);
+                try {
+                    new IUContrato().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(IUContrato.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -289,15 +319,55 @@ public class IUContrato extends javax.swing.JFrame {
             String nombre = jTextField1.getText().toString() + jTextField2.getText().toString();
             String direccion = jTextField3.getText().toString();
             
-            String consulta  = "SELECT insertarEmpleado('" + nombre + "', "+ "1" + ", '" + direccion + "');";
+            String consulta  = "SELECT insertarEmpleado('" + nombre + "', "+ lsPais.get(jComboBox1.getSelectedIndex()) + ", '" + direccion + "');";
 
             //.resultado(consulta);
             
-            ResultSet res = 
-            connec.resultado(consulta);
+            ResultSet res = connec.resultado(consulta);
             res.next();
             
                     
+        }
+    }
+    
+    private void insertarContrato() throws SQLException{
+    
+        if(!nuevo){
+          
+            
+            String consulta  = "SELECT insertarContrato(1, 1, "+ Integer.parseInt(jTextField4.getText().toString()) +", '"+ jTextField5.getText().toString()+ "', '" + jTextField6.getText().toString() + "', '" + jTextField7.getText().toString() + "', '" + jTextField8.getText().toString() + "');";
+
+            //.resultado(consulta);
+            
+            ResultSet res = connec.resultado(consulta);
+            res.next();
+            
+                    
+        }
+    }
+    
+    
+    private void getPaises() throws SQLException{
+    
+        String consulta = "SELECT * FROM getPaises();";
+        ResultSet res = connec.resultado(consulta);
+        jComboBox1.removeAllItems();
+        while(res.next()){
+            
+           jComboBox1.addItem(res.getString(2));
+            lsPais.add(res.getInt(1));
+        }
+    }
+    
+    private void getCargos() throws SQLException{
+    
+        String consulta = "SELECT * FROM getCargos();";
+        ResultSet res = connec.resultado(consulta);
+        jComboBox2.removeAllItems();
+        while(res.next()){
+            
+           jComboBox2.addItem(res.getString(2));
+            lsCargo.add(res.getInt(1));
         }
     }
 }
