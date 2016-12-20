@@ -28,11 +28,13 @@ class Contrato {
   
   private String descripcion;
   Conexion con;
+    private String[] args;
   public Contrato(Conexion con){
       this.con=con;
-      IUContrato iuc = new IUContrato(con);
-      
-      iuc.setVisible(true);
+      //IUContrato iuc = new IUContrato(con);
+      IUContratoBuscar iu=new IUContratoBuscar(con);
+      iu.setVisible(true);
+     // iuc.setVisible(true);
   }
 
     public Contrato(long id_empleado, long id_empleado_cargo, long salario, GregorianCalendar fecha_inicio, GregorianCalendar fecha_fin, GregorianCalendar fecha_actual, String descripcion) {

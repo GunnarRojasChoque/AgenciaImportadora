@@ -21,15 +21,29 @@ import javafx.scene.control.ComboBox;
 public class IUContrato extends javax.swing.JFrame {
 
     boolean nuevo = false;
-    Conexion connec;
-    Component cm = new Component() {};
+    Conexion connec=new Conexion();
+    
+    
     ArrayList<Integer> lsPais = new ArrayList<>();
     ArrayList<Integer> lsCargo = new ArrayList<>();
+    
+    
+    String NOMBRE_EMP;
+    String DIRECCION_EMP;
+    int PAIS_EMP;
+    String CI_EMP;
+    String APELLIDO_EMP;
+    
+    
+    
+    
+    
     
     /**
      * Creates new form IUContrato
      */
     public IUContrato(Conexion con) {
+        
         try {
             initComponents();
             this.connec = con;
@@ -40,11 +54,15 @@ public class IUContrato extends javax.swing.JFrame {
         }
     }
 
-    private IUContrato() throws SQLException {
-        getPaises();
-
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-
+    IUContrato(Conexion con,String ci) {
+        connec.conectar();
+        
+        initComponents();
+        initV();
+        //getPaises();
+        //getCargos();
+        llenarFormularioExistente(ci);
+        
     }
 
     /**
@@ -80,12 +98,16 @@ public class IUContrato extends javax.swing.JFrame {
         jTextField8 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jLabel13 = new javax.swing.JLabel();
+        jTextField9 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Empleado");
 
         jLabel2.setText("Nombre");
+
+        jTextField1.setText("jhghjj");
 
         jLabel3.setText("Apellidos");
 
@@ -131,6 +153,8 @@ public class IUContrato extends javax.swing.JFrame {
 
         jButton2.setText("Cancelar");
 
+        jLabel13.setText("CI");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -147,12 +171,17 @@ public class IUContrato extends javax.swing.JFrame {
                     .addComponent(jTextField5)
                     .addComponent(jTextField6)
                     .addComponent(jTextField7)
+                    .addComponent(jTextField8)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 289, Short.MAX_VALUE)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2)
                             .addComponent(jLabel3)
-                            .addComponent(jLabel4)
                             .addComponent(jLabel5)
                             .addComponent(jLabel6)
                             .addComponent(jLabel7)
@@ -160,14 +189,11 @@ public class IUContrato extends javax.swing.JFrame {
                             .addComponent(jLabel9)
                             .addComponent(jLabel10)
                             .addComponent(jLabel11)
-                            .addComponent(jLabel12))
-                        .addGap(0, 349, Short.MAX_VALUE))
-                    .addComponent(jTextField8)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)))
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel13)
+                            .addComponent(jLabel4))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jTextField9))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -184,8 +210,12 @@ public class IUContrato extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel13)
+                .addGap(18, 18, 18)
+                .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(13, 13, 13)
                 .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel5)
@@ -217,7 +247,7 @@ public class IUContrato extends javax.swing.JFrame {
                 .addComponent(jLabel12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
                     .addComponent(jButton2))
@@ -249,31 +279,9 @@ public class IUContrato extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
+    /*
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(IUContrato.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(IUContrato.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(IUContrato.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(IUContrato.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
@@ -281,6 +289,15 @@ public class IUContrato extends javax.swing.JFrame {
                 } catch (SQLException ex) {
                     Logger.getLogger(IUContrato.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            }
+        });
+    }
+*/
+    private void initV(){
+    
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                setVisible(true);
             }
         });
     }
@@ -294,6 +311,7 @@ public class IUContrato extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -310,6 +328,7 @@ public class IUContrato extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTextField jTextField7;
     private javax.swing.JTextField jTextField8;
+    private javax.swing.JTextField jTextField9;
     // End of variables declaration//GEN-END:variables
 
     private void insertar() throws SQLException{
@@ -335,7 +354,7 @@ public class IUContrato extends javax.swing.JFrame {
         if(!nuevo){
           
             
-            String consulta  = "SELECT insertarContrato(1, 1, "+ Integer.parseInt(jTextField4.getText().toString()) +", '"+ jTextField5.getText().toString()+ "', '" + jTextField6.getText().toString() + "', '" + jTextField7.getText().toString() + "', '" + jTextField8.getText().toString() + "');";
+            String consulta  = "SELECT insertarContrato(1, 1, "+ Integer.parseInt(jTextField4.getText().toString()) +", '"+ jTextField5.getText().toString()+ "', '" + jTextField6.getText().toString() + "', '" + jTextField7.getText().toString() + "', '" + jTextField8.getText().toString() + "','"+jTextField9.getText().toString()+"');";                                        
 
             //.resultado(consulta);
             
@@ -368,6 +387,47 @@ public class IUContrato extends javax.swing.JFrame {
             
            jComboBox2.addItem(res.getString(2));
             lsCargo.add(res.getInt(1));
-        }
+       }
     }
+    
+    public void llenarFormularioExistente(String ci){
+    
+        String funcion="select * from buscarEmp('"+ ci+"');";
+        
+        ResultSet res=connec.resultado(funcion);
+        try {
+            while(res.next()){
+                
+                PAIS_EMP=res.getInt(2);
+                NOMBRE_EMP=res.getString(3);
+                DIRECCION_EMP=res.getString(4);
+                CI_EMP=res.getString(5);
+                APELLIDO_EMP=res.getString(6);
+                
+                
+                
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(IUContrato.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
+        jTextField1.setText(NOMBRE_EMP);
+        jTextField2.setText(APELLIDO_EMP);
+        jTextField9.setText(CI_EMP);
+        jTextField3.setText(DIRECCION_EMP);
+        
+        jTextField1.setEnabled(false);
+        jTextField2.setEnabled(false);
+        jTextField9.setEnabled(false);
+        jTextField3.setEnabled(false);
+        
+        jComboBox1.removeAllItems();
+        jComboBox1.addItem(String.valueOf(PAIS_EMP));
+        jComboBox1.setEnabled(false);
+            
+    
+    }
+    
+    
+    
 }
