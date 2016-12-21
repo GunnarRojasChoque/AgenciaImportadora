@@ -24,6 +24,7 @@ public class IUContratoBuscar extends javax.swing.JFrame {
     public IUContratoBuscar(Conexion con) {
         this.con=con;
         initComponents();
+        initV();
     }
 
 
@@ -81,7 +82,7 @@ public class IUContratoBuscar extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         ci=jTextField1.getText().toString();
         IUContrato iuc = new IUContrato(con,ci);
-        iuc.setVisible(true);
+        //iuc.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -123,6 +124,14 @@ public class IUContratoBuscar extends javax.swing.JFrame {
 //            }
 //        });
 //    }
+    
+    private void initV(){
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

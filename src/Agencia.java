@@ -27,7 +27,7 @@ class Agencia {
         
         
         
-        boolean id = contrato.llenar(1, 1, 1600, new GregorianCalendar(2016, 12, 12), new GregorianCalendar(2017, 12, 12), new GregorianCalendar(2016, 12, 10), "descripcion");
+        //boolean id = contrato.llenar(1, 1, 1600, new GregorianCalendar(2016, 12, 12), new GregorianCalendar(2017, 12, 12), new GregorianCalendar(2016, 12, 10), "descripcion");
 
         
         
