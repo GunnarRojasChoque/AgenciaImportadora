@@ -13,8 +13,12 @@ public class Conexion {
     private String driver="org.postgresql.Driver";
     private String nombreDB="AgenciaImportadora";
     private String url="jdbc:postgresql://localhost:5432/"+nombreDB;
+
     private String user="singular";
     private String password="plural";
+    private String user="postgres";
+    private String password="root";
+
     
     private Connection con;
     Statement st;
