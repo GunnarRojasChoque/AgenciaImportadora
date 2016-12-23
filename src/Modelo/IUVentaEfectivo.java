@@ -32,6 +32,7 @@ public class IUVentaEfectivo extends javax.swing.JFrame {
         tipo = new TipoTransaccion(2);
         initComponents();
         tipo.llenarTabla(jTable1);
+        setDefaultCloseOperation(HIDE_ON_CLOSE);
     }
 
     /**
