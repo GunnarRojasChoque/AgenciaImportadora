@@ -8,6 +8,8 @@ package Modelo;
 import agenciasisii.Conexion;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 /**
  *
  * @author Max
@@ -34,9 +36,7 @@ public class Venta {
         return res;        
     }
 
-    void mostrarMensaje() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
     
     public int ventasPorModelo(String nom) {
         conexion = new Conexion();

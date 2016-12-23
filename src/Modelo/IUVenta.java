@@ -12,6 +12,8 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 /**
@@ -24,12 +26,12 @@ public class IUVenta extends javax.swing.JFrame {
      * Creates new form IUVenta
      */
     Conexion conexion ;
+    Validacion validar;
     
     public IUVenta() {
         initComponents();
         conexion = new Conexion();
         conexion.conectar();
-        llenarComboboxEmpleado();
         setDefaultCloseOperation(HIDE_ON_CLOSE);
     }
 
@@ -43,12 +45,12 @@ public class IUVenta extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jDateChooser2 = new com.toedter.calendar.JDateChooser();
+        jTextField1 = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         jMenu1 = new javax.swing.JMenu();
@@ -57,17 +59,12 @@ public class IUVenta extends javax.swing.JFrame {
         jMenuItem3 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
 
         jButton1.setText("MOSTRAR");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
-            }
-        });
-
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
             }
         });
 
@@ -79,10 +76,10 @@ public class IUVenta extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
-        jMenu1.setText("options");
+        jMenu1.setText("Ventas");
 
         modelo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
-        modelo.setText("Ventas Por Modelo");
+        modelo.setText("Por Modelo");
         modelo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 modeloActionPerformed(evt);
@@ -91,7 +88,7 @@ public class IUVenta extends javax.swing.JFrame {
         jMenu1.add(modelo);
 
         jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem2.setText("Ventas a Credito");
+        jMenuItem2.setText(" A Credito");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
@@ -100,7 +97,7 @@ public class IUVenta extends javax.swing.JFrame {
         jMenu1.add(jMenuItem2);
 
         jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem3.setText("Ventas En Efectivo");
+        jMenuItem3.setText("En Efectivo");
         jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem3ActionPerformed(evt);
@@ -116,42 +113,43 @@ public class IUVenta extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(190, 190, 190)
+                        .addComponent(jButton1)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(54, 54, 54)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGap(0, 49, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel1))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jComboBox1, 0, 248, Short.MAX_VALUE)
-                            .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jDateChooser2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(179, 179, 179)
-                        .addComponent(jButton1)))
-                .addContainerGap(45, Short.MAX_VALUE))
+                            .addComponent(jDateChooser1, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                            .addComponent(jDateChooser2, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                            .addComponent(jTextField1))))
+                .addGap(24, 24, 24))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(60, 60, 60)
+                .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel5)
                     .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel6)
                     .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(29, 29, 29)
                 .addComponent(jButton1)
-                .addContainerGap(144, Short.MAX_VALUE))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         pack();
@@ -187,20 +185,19 @@ public class IUVenta extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         ResultSet rs= null;
-        String nom=jComboBox1.getSelectedItem().toString();
+       // String nom = "Gunnar";
+        String nom=validar.nombre(jTextField1.getText().toString());
+        //String appell=validar.apellido(jComboBox1.getSelectedItem().toString());
         String fecha1 = new SimpleDateFormat("yyyy/MM/dd").format(jDateChooser1.getDate());
         String fecha2 = new SimpleDateFormat("yyyy/MM/dd").format(jDateChooser2.getDate());
+        
         rs = conexion.resultado("SELECT get_ventasemp('"+fecha1+"','"+fecha2+"','"+nom+"');");
         try {
+            //rs = conexion.resultado("SELECT get_ventasemp('"+fecha1+"','"+fecha2+"','"+nom+"');");
             rs.next();
             int res = rs.getInt(1);
-            boolean empConMayorVenta =
-            if(){
-            
-            
             JOptionPane.showMessageDialog(null,"\n" + "La Cantidad de Ventas realizadas por "+nom+" es:  "+ res,
                 "Prueba Exitosa", JOptionPane.INFORMATION_MESSAGE);
-            }
         } catch (SQLException ex) {
             Logger.getLogger(IUVenta.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -243,7 +240,6 @@ public class IUVenta extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel1;
@@ -254,36 +250,25 @@ public class IUVenta extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JMenuItem modelo;
     // End of variables declaration//GEN-END:variables
 
-    private void llenarComboboxEmpleado() {
-        ResultSet rs = null;       
-        try {
-           rs = conexion.resultado("SELECT public.\"get_empleados\"();");
-           boolean r = rs.next();
-           while( r ){
-              System.out.println(rs.getString(1));
-              jComboBox1.addItem(rs.getString(1));
-              //jComboBox1.addItem("hola");
-              rs.next();
-           }
-        }
-        catch(Exception e) {
-           System.out.println("error llenado");
-        }
-      }
-      private int tam(){
-          int res =0;
-          ResultSet r = null;
-          try {
-             r = conexion.resultado("SELECT public.\"cant_empleado\"();");
-             r.next();
-           res = r.getInt(1);
-           System.out.println(res);
-        } catch(Exception e) {
-           System.out.println("error en obtener tamano");
+    
+     public String nombreV(String nom) {
+        String res="";
+        String exprecion = ("[a-zA-Z]{1,20}\\s?[a-zA-Z]{1,20}");
+        Pattern p = Pattern.compile(exprecion);
+        Matcher m = p.matcher(nom);
+        if (m.matches()) {
+            res = nom;
+            System.out.println("nombre valido:"+nom );
+        } else {
+            JOptionPane.showMessageDialog(null,"\n",
+                "Llene Correctamente el Campo Nombre ", JOptionPane.INFORMATION_MESSAGE);
+            //System.out.println("error en nombre");
+            
         }
         return res;
-      }
+    }
 }
