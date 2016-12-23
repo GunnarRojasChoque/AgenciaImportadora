@@ -42,6 +42,12 @@ public class IUVentasPorModelo extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+
         jLabel1.setText("Modelo :");
 
         mostrar.setText("MOSTRAR");
@@ -90,6 +96,10 @@ public class IUVentasPorModelo extends javax.swing.JFrame {
                 "Prueba Exitosa", JOptionPane.INFORMATION_MESSAGE);
 
     }//GEN-LAST:event_mostrarMouseClicked
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     /**
      * @param args the command line arguments

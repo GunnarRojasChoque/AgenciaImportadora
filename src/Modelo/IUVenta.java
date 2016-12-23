@@ -194,8 +194,13 @@ public class IUVenta extends javax.swing.JFrame {
         try {
             rs.next();
             int res = rs.getInt(1);
+            boolean empConMayorVenta =
+            if(){
+            
+            
             JOptionPane.showMessageDialog(null,"\n" + "La Cantidad de Ventas realizadas por "+nom+" es:  "+ res,
                 "Prueba Exitosa", JOptionPane.INFORMATION_MESSAGE);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(IUVenta.class.getName()).log(Level.SEVERE, null, ex);
         }
