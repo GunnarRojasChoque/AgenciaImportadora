@@ -37,6 +37,23 @@ public class Venta {
     void mostrarMensaje() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-     
+    
+    public int ventasPorModelo(String nom) {
+        conexion = new Conexion();
+        conexion.conectar();
+        ResultSet rs = null;
+        int res = 0;
+        try {
+           rs = conexion.resultado("SELECT get_ventaspormodelo('"+nom+"');");
+           rs.next();
+           res = rs.getInt(1);
+           System.out.println(res);
+           }
+        catch(Exception e) {
+           System.out.println("error consulta modelos");
+        }
+        return res;
+        
+    }
     
 }
