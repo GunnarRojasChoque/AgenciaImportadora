@@ -122,7 +122,7 @@ public class IUContratoBuscarEmpresa extends javax.swing.JFrame {
         String consulta="select * from getEmpresas();";
         ResultSet res=con.resultado(consulta);
         while(res.next()){
-            jComboBoxNombres.addItem(res.getString(2));
+            jComboBoxNombres.addItem(res.getString(3));
             lsNombreEmpresa.add(res.getInt(1));
         
         }

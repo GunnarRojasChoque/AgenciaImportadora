@@ -11,37 +11,36 @@ import java.util.logging.Logger;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author alvaro
  */
 public class IUContratoEmpresa extends javax.swing.JFrame {
-    boolean esnuevo=false;
+
+    boolean esnuevo = false;
 
     int ID_EMPRESA;
     int SALARIO_EMPRESA;
-    
+
     String FECHAINI_EMPRESA;
     String FECHAFIN_EMPRESA;
     String FECHAACT_EMPRESA;
     String DESCRIPCION;
-    
-    
+
     int ID_TIPO_EMPRESA;
-    
+
     String DIRECCION_EMPRESA;
     String NOMBRE_EMPRESA;
-    
-    ArrayList<Integer> lsTipoEmpresa=new ArrayList<>();
+
+    ArrayList<Integer> lsTipoEmpresa = new ArrayList<>();
     Conexion con;
-    
+
     /**
      * Creates new form IUContratoEmp
      */
-    public IUContratoEmpresa(Conexion con,boolean esnuevo) {
-        this.esnuevo=esnuevo;
-        this.con=con;
+    public IUContratoEmpresa(Conexion con, boolean esnuevo) {
+        this.esnuevo = esnuevo;
+        this.con = con;
         initComponents();
         initV();
         try {
@@ -50,13 +49,14 @@ public class IUContratoEmpresa extends javax.swing.JFrame {
             Logger.getLogger(IUContratoEmpresa.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public IUContratoEmpresa(Conexion con,int idEmpresa){
-        this.ID_EMPRESA=idEmpresa;
-        this.con=con;
+
+    public IUContratoEmpresa(Conexion con, int idEmpresa) {
+        this.ID_EMPRESA = idEmpresa;
+        this.con = con;
         initComponents();
         initV();
         llenarCamposEmpresa();
-    
+
     }
 
     /**
@@ -207,10 +207,17 @@ public class IUContratoEmpresa extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
+        if(esnuevo){
         
-        
-        
-        
+            insertarEmpresa();
+            insertarContratoEmpresa();
+        }else{
+         insertarContratoEmpresa();
+        }
+
+//insertarContratoEmpresa();
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -225,14 +232,14 @@ public class IUContratoEmpresa extends javax.swing.JFrame {
             }
         });
     }
-*/
-    private void initV(){
+     */
+    private void initV() {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 setVisible(true);
             }
         });
-    
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -258,22 +265,121 @@ public class IUContratoEmpresa extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField7;
     // End of variables declaration//GEN-END:variables
 
+    private void llenarTipoEmpresa() throws SQLException {
 
-    private void llenarTipoEmpresa() throws SQLException{
-        
         jComboBoxTipoEmpresa.removeAllItems();
-        String consulta="select * from getTipoEmpresas()";
-        ResultSet res=con.resultado(consulta);
-        while(res.next()){
+        String consulta = "select * from getTipoEmpresas()";
+        ResultSet res = con.resultado(consulta);
+        while (res.next()) {
             jComboBoxTipoEmpresa.addItem(res.getString(2));
             lsTipoEmpresa.add(res.getInt(1));
+
+        }
+    }
+
+    private void llenarCamposEmpresa
+        () {
+
+        String consulta = null;
+        consulta = consulta.format("select * from getEmpresa(%d)",
+                ID_EMPRESA);
         
+        
+        ResultSet res = con.resultado(consulta);
+
+        try {
+
+            while (res.next()) {
+
+//                ID_EMPRESA = res.getInt(1);
+                jTextField1.setText(res.getString(3));
+                jTextField2.setText(res.getString(4));
+
+                jComboBoxTipoEmpresa.removeAllItems();
+                ID_TIPO_EMPRESA = res.getInt(2);
+
+                jComboBoxTipoEmpresa.setEnabled(false);
+                jTextField1.setEnabled(false);
+                jTextField2.setEnabled(false);
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(IUContratoEmpresa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        jComboBoxTipoEmpresa.addItem(getNameTipoEmpresa(ID_TIPO_EMPRESA));
+    }
+
+    private String getNameTipoEmpresa(int id) {
+
+        String respuesta = null;
+
+        String consulta = "select * from getTipoEmpresa(" + id + ")";
+        ResultSet res = con.resultado(consulta);
+
+        try {
+            while (res.next()) {
+
+                respuesta = res.getString(2);
+            }
+            
+            res.close();
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(IUContratoEmpresa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return respuesta;
+    }
+
+    private void insertarContratoEmpresa(){
+    
+        try {
+            SALARIO_EMPRESA = Integer.valueOf(jTextField3.getText());
+            FECHAINI_EMPRESA = jTextField4.getText();
+            FECHAFIN_EMPRESA = jTextField5.getText();
+            FECHAACT_EMPRESA = jTextField6.getText();
+            DESCRIPCION = jTextField7.getText();
+            
+            String consulta = "";
+            consulta =
+                    consulta.format(
+                            "select setContratoEmpresa(%d, %d, %d, '%s', '%s', '%s', '%s')",
+                            ID_TIPO_EMPRESA, ID_EMPRESA, SALARIO_EMPRESA,
+                            FECHAINI_EMPRESA, FECHAFIN_EMPRESA, FECHAACT_EMPRESA,
+                            DESCRIPCION);
+            
+            ResultSet res = con.resultado(consulta);
+            
+            res.next();
+        } catch (SQLException ex) {
+            Logger.getLogger(IUContratoEmpresa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
+    
+    private void insertarEmpresa(){
+    
+        try {
+            NOMBRE_EMPRESA = jTextField1.getText();
+            DIRECCION_EMPRESA = jTextField2.getText();
+            ID_TIPO_EMPRESA = lsTipoEmpresa.get(jComboBoxTipoEmpresa.getSelectedIndex());
+            
+            String consulta = null;
+            consulta = consulta.format(
+                    "select * FROM setEmpresa(%d, '%s', '%s')",
+                    ID_TIPO_EMPRESA, NOMBRE_EMPRESA, DIRECCION_EMPRESA);
+            
+            ResultSet res = con.resultado(consulta);
+            
+            while(res.next()){
+            
+                ID_EMPRESA = res.getInt(1);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(IUContratoEmpresa.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    private void llenarCamposEmpresa(){
-        
-    }
-    
-
 }

@@ -39,13 +39,21 @@ public class ContratoTest {
 
     @Test
     public void prueba() {
-        Agencia agen = new Agencia();
-        Contrato contrato = agen.nuevoContrato();
-        boolean id = contrato.llenar(1, 1, 1600, new GregorianCalendar(2016, 12, 12), new GregorianCalendar(2017, 12, 12), new GregorianCalendar(2016, 12, 10), "descripcion");
-
-        assertTrue(id);
+        
     }
-    
-    
 
+
+    @Test
+    public void Empleado(){
+    
+        Empleado em = new Empleado();
+
+        boolean estado = em.getEstado();
+        
+        boolean estadoActual = em.getEstadoActual();
+        
+        assertTrue(estado);
+        assertTrue(estadoActual);
+    }   
+    
 }

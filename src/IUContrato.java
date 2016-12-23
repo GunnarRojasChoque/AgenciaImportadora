@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 
-
 import agenciasisii.Conexion;
 import java.awt.Component;
 import java.sql.ResultSet;
@@ -22,36 +21,51 @@ public class IUContrato extends javax.swing.JFrame {
 
     boolean esnuevo = false;
     Conexion connec;
-    
-    
+
     ArrayList<Integer> lsPais = new ArrayList<>();
     ArrayList<Integer> lsCargo = new ArrayList<>();
-    
+
     int ID_EMP;
     String NOMBRE_EMP;
     String DIRECCION_EMP;
     int PAIS_EMP;
     String CI_EMP;
     String APELLIDO_EMP;
-    
+
     int ID_CARGO_CONT;
     int SALARIO_CONT;
     String FECHAINI_CONT;
     String FECHAFIN_CONT;
     String FECHAACT_CONT;
     String DESCRIPCION_CONT;
-    
 
-    public IUContrato(Conexion con,boolean esnuevo) {
-        
+    public IUContrato(Conexion connec, int ID_EMP, String NOMBRE_EMP, String DIRECCION_EMP, int PAIS_EMP, String CI_EMP, String APELLIDO_EMP, int ID_CARGO_CONT, int SALARIO_CONT, String FECHAINI_CONT, String FECHAFIN_CONT, String FECHAACT_CONT, String DESCRIPCION_CONT) {
+        this.connec = connec;
+        this.ID_EMP = ID_EMP;
+        this.NOMBRE_EMP = NOMBRE_EMP;
+        this.DIRECCION_EMP = DIRECCION_EMP;
+        this.PAIS_EMP = PAIS_EMP;
+        this.CI_EMP = CI_EMP;
+        this.APELLIDO_EMP = APELLIDO_EMP;
+        this.ID_CARGO_CONT = ID_CARGO_CONT;
+        this.SALARIO_CONT = SALARIO_CONT;
+        this.FECHAINI_CONT = FECHAINI_CONT;
+        this.FECHAFIN_CONT = FECHAFIN_CONT;
+        this.FECHAACT_CONT = FECHAACT_CONT;
+        this.DESCRIPCION_CONT = DESCRIPCION_CONT;
+    }
+
+    public IUContrato(Conexion con, boolean esnuevo) {
+
         try {
-            this.esnuevo=esnuevo;
+            this.esnuevo = esnuevo;
             initComponents();
             initV();
             this.connec = con;
             getPaises();
             getCargos();
             llenarFechaActual();
+//            llenar(nombre, apellidos, ci, id_pais, direccion, id_cargo, salario, fechaIni, fechaFin, fechaCon, descripcion);
         } catch (SQLException ex) {
             Logger.getLogger(IUContrato.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -59,22 +73,24 @@ public class IUContrato extends javax.swing.JFrame {
 
     /* crea la renovacion de un contrato para esto recibe
         el carnet de un empleado
-    */
-    IUContrato(Conexion con,String ci){
+     */
+    IUContrato(Conexion con, String ci) {
         //connec.conectar();
-        this.connec=con;
+        this.connec = con;
         initComponents();
         initV();
+        
+//        llenar(null, null, ci, 0, null, id_cargo, salario, fechaIni, fechaFin, fechaCon, descripcion);
+        
         llenarFormularioEmpleadoExiste(ci);
-        
-        
+
         try {
             getCargos();
             llenarFechaActual();
         } catch (SQLException ex) {
             Logger.getLogger(IUContrato.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
 
     /**
@@ -117,9 +133,7 @@ public class IUContrato extends javax.swing.JFrame {
 
         jLabel1.setText("Empleado");
 
-        jLabel2.setText("Nombress");
-
-        jTextField1.setText("jhghjj");
+        jLabel2.setText("Nombres");
 
         jLabel3.setText("Apellidos");
 
@@ -185,7 +199,7 @@ public class IUContrato extends javax.swing.JFrame {
                     .addComponent(jTextField7)
                     .addComponent(jTextField8)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 289, Short.MAX_VALUE)
+                        .addGap(0, 341, Short.MAX_VALUE)
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1))
@@ -204,7 +218,7 @@ public class IUContrato extends javax.swing.JFrame {
                             .addComponent(jLabel12)
                             .addComponent(jLabel13)
                             .addComponent(jLabel4))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 402, Short.MAX_VALUE))
                     .addComponent(jTextField9))
                 .addContainerGap())
         );
@@ -275,16 +289,18 @@ public class IUContrato extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
-            if(esnuevo){  //si es el registro de un nuevo empleado y un nuevo contrato
+            
+            reconocerCampos();
+            
+            if (esnuevo) {  //si es el registro de un nuevo empleado y un nuevo contrato
                 insertarNuevoEmpleado();
                 insertarContrato();
-            
-            }
-            else{   //si ya existe el empleado y es renovacion de contrato
-            
+
+            } else {   //si ya existe el empleado y es renovacion de contrato
+
                 insertarContrato();
             }
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(IUContrato.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -310,9 +326,9 @@ public class IUContrato extends javax.swing.JFrame {
             }
         });
     }
-*/
-    private void initV(){
-    
+     */
+    private void initV() {
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 setVisible(true);
@@ -349,179 +365,209 @@ public class IUContrato extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField9;
     // End of variables declaration//GEN-END:variables
 
-    private void insertarNuevoEmpleado() throws SQLException{
-    
-        if(esnuevo){
-            
-            NOMBRE_EMP = jTextField1.getText().toString();
-            PAIS_EMP=lsPais.get(jComboBox1.getSelectedIndex());
-            DIRECCION_EMP = jTextField3.getText().toString();
-            CI_EMP=jTextField9.getText().toString();
-            APELLIDO_EMP=jTextField2.getText().toString();
-            
-            String consulta  = "SELECT insertarEmpleado('" + NOMBRE_EMP + "', "
-                                                            + PAIS_EMP + ", '" 
-                                                            + DIRECCION_EMP + "','"
-                                                            +CI_EMP+"','"
-                                                            + APELLIDO_EMP+"');";
+    private void insertarNuevoEmpleado() {
+
+        if (esnuevo) {
+//
+//            NOMBRE_EMP = jTextField1.getText().toString();
+            PAIS_EMP = lsPais.get(jComboBox1.getSelectedIndex());
+//            DIRECCION_EMP = jTextField3.getText().toString();
+//            CI_EMP = jTextField9.getText().toString();
+//            APELLIDO_EMP = jTextField2.getText().toString();
+
+            String consulta = "SELECT insertarEmpleado('" + NOMBRE_EMP + "', "
+                    + PAIS_EMP + ", '"
+                    + DIRECCION_EMP + "','"
+                    + CI_EMP + "','"
+                    + APELLIDO_EMP + "');";
 
             ResultSet res = connec.resultado(consulta);
-            res.next();
-            
-                    
+            try {
+
+                res.next();
+            } catch (SQLException ex) {
+                Logger.getLogger(IUContrato.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
         }
     }
-    
-    private void insertarContrato() throws SQLException{
-    
-        
-          
-            ID_EMP=buscarIdEmpleado(CI_EMP);
-            SALARIO_CONT=Integer.parseInt(jTextField4.getText().toString());
-            FECHAINI_CONT=jTextField5.getText().toString();
-            FECHAFIN_CONT=jTextField6.getText().toString();
-            FECHAACT_CONT=jTextField7.getText().toString();
-            DESCRIPCION_CONT=jTextField8.getText().toString();
-            
-            borrarEmp_Cargo();
-            llenarCargo();
-            
-            String consulta  = "SELECT insertarContrato(1,"
-                                + ID_EMP+" , "    //idemp
-                                + lsCargo.get(jComboBox2.getSelectedIndex())+ " , "
-                                + SALARIO_CONT
-                                +", '"+ FECHAINI_CONT+ "', '" 
-                                + FECHAFIN_CONT + "', '"
-                                + FECHAACT_CONT + "', '"
-                                + DESCRIPCION_CONT + "'"
-                                +");";                                        
 
-            ResultSet res = connec.resultado(consulta);
-            res.next();
-            
-                    
-        
+    private void insertarContrato() throws SQLException {
+
+//        ID_EMP = buscarIdEmpleado(CI_EMP);
+//        SALARIO_CONT = Integer.parseInt(jTextField4.getText().toString());
+//        FECHAINI_CONT = jTextField5.getText().toString();
+//        FECHAFIN_CONT = jTextField6.getText().toString();
+//        FECHAACT_CONT = jTextField7.getText().toString();
+//        DESCRIPCION_CONT = jTextField8.getText().toString();
+
+        borrarEmp_Cargo();
+        llenarCargo();
+
+        String consulta = "SELECT insertarContrato(1,"
+                + ID_EMP + " , " //idemp
+                + lsCargo.get(jComboBox2.getSelectedIndex()) + " , "
+                + SALARIO_CONT
+                + ", '" + FECHAINI_CONT + "', '"
+                + FECHAFIN_CONT + "', '"
+                + FECHAACT_CONT + "', '"
+                + DESCRIPCION_CONT + "'"
+                + ");";
+
+        ResultSet res = connec.resultado(consulta);
+        res.next();
+
     }
-    private int buscarIdEmpleado(String ci) throws SQLException{
-        int id=0;
-        String funcion="select * from buscarEmp('"+ ci+"');";
-        ResultSet res=connec.resultado(funcion);
-        if(res.next()){
-            id=res.getInt(1);
+
+    private int buscarIdEmpleado(String ci) throws SQLException {
+        int id = 0;
+        String funcion = "select * from buscarEmp('" + ci + "');";
+        ResultSet res = connec.resultado(funcion);
+        if (res.next()) {
+            id = res.getInt(1);
         }
         return id;
     }
-    private void borrarEmp_Cargo() throws SQLException{
-        
-        int idCargo=lsCargo.get(jComboBox2.getSelectedIndex());
-        String consulta="select * from borraremp_cargo("+ID_EMP+","+idCargo+");";
-        ResultSet res=connec.resultado(consulta);
+
+    private void borrarEmp_Cargo() throws SQLException {
+
+        int idCargo = lsCargo.get(jComboBox2.getSelectedIndex());
+        String consulta = "select * from borraremp_cargo(" + ID_EMP + "," + idCargo + ");";
+        ResultSet res = connec.resultado(consulta);
         res.next();
-        
+
     }
-    
-    private void getPaises() throws SQLException{
-    
+
+    private void getPaises() throws SQLException {
+
         String consulta = "SELECT * FROM getPaises();";
         ResultSet res = connec.resultado(consulta);
         jComboBox1.removeAllItems();
-        while(res.next()){
-            
-           jComboBox1.addItem(res.getString(2));
+        while (res.next()) {
+
+            jComboBox1.addItem(res.getString(2));
             lsPais.add(res.getInt(1));
         }
     }
-    
-    private void getCargos() throws SQLException{
-    
+
+    private void getCargos() throws SQLException {
+
         String consulta = "SELECT * FROM getCargos();";
         ResultSet res = connec.resultado(consulta);
         jComboBox2.removeAllItems();
-        while(res.next()){
-            
-           jComboBox2.addItem(res.getString(2));
+        while (res.next()) {
+
+            jComboBox2.addItem(res.getString(2));
             lsCargo.add(res.getInt(1));
-       }
+        }
     }
-    
-    public void llenarFormularioEmpleadoExiste(String ci){
-    
-        String funcion="select * from buscarEmp('"+ ci+"');";
-        
-        ResultSet res=connec.resultado(funcion);
+
+    public void llenarFormularioEmpleadoExiste(String ci) {
+
+        String funcion = "select * from buscarEmp('" + ci + "');";
+
+        ResultSet res = connec.resultado(funcion);
         try {
-            while(res.next()){
-                ID_EMP=res.getInt(1);
-                PAIS_EMP=res.getInt(2);
-                NOMBRE_EMP=res.getString(3);
-                DIRECCION_EMP=res.getString(4);
-                CI_EMP=res.getString(5);
-                APELLIDO_EMP=res.getString(6);
-                
-                
-                
+            while (res.next()) {
+                ID_EMP = res.getInt(1);
+                PAIS_EMP = res.getInt(2);
+                NOMBRE_EMP = res.getString(3);
+                DIRECCION_EMP = res.getString(4);
+                CI_EMP = res.getString(6);
+                APELLIDO_EMP = res.getString(7);
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(IUContrato.class.getName()).log(Level.SEVERE, null, ex);
         }
-                
+
         jTextField1.setText(NOMBRE_EMP);
         jTextField2.setText(APELLIDO_EMP);
         jTextField9.setText(CI_EMP);
         jTextField3.setText(DIRECCION_EMP);
-        
+
         jTextField1.setEnabled(false);
         jTextField2.setEnabled(false);
         jTextField9.setEnabled(false);
         jTextField3.setEnabled(false);
-        
+
         jComboBox1.removeAllItems();
-       // jComboBox1.addItem(String.valueOf(PAIS_EMP));
+        // jComboBox1.addItem(String.valueOf(PAIS_EMP));
         llenarPaisEmpleado();
         jComboBox1.setEnabled(false);
-            
-    
+
     }
-    
-    public void llenarPaisEmpleado(){
-     
-        
-        String consulta="select * from getPais("+PAIS_EMP+");";
-        ResultSet res=connec.resultado(consulta);
+
+    public void llenarPaisEmpleado() {
+
+        String consulta = "select * from getPais(" + PAIS_EMP + ");";
+        ResultSet res = connec.resultado(consulta);
         try {
-            if(res.next()){
+            if (res.next()) {
                 jComboBox1.addItem(res.getString(2));
-                
-                
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(IUContrato.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
-    public void llenarCargo(){
+
+    public void llenarCargo() {
         try {
-            int idCargo=lsCargo.get(jComboBox2.getSelectedIndex());
-            
-            
-            String consulta="select * from setCargoEmp("+ID_EMP+","+idCargo+");";
-            ResultSet res=connec.resultado(consulta);
+            int idCargo = lsCargo.get(jComboBox2.getSelectedIndex());
+
+            String consulta = "select * from setCargoEmp(" + ID_EMP + "," + idCargo + ");";
+            ResultSet res = connec.resultado(consulta);
             res.next();
         } catch (SQLException ex) {
             Logger.getLogger(IUContrato.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-        
-    private void llenarFechaActual() throws SQLException{
-        String fecha="";
-        ResultSet res=connec.resultado("select current_date ;");
-        if(res.next()){
-            fecha=res.getString(1);
+
+    private void llenarFechaActual() throws SQLException {
+        String fecha = "";
+        ResultSet res = connec.resultado("select current_date ;");
+        if (res.next()) {
+            fecha = res.getString(1);
         }
         jTextField7.setText(fecha);
         jTextField7.setEnabled(false);
+
+    }
+
+    private void llenar(String nombre, String apellidos, String ci, int id_pais,
+            String direccion, int id_cargo, int salario, String fecha_ini, String fecha_fin,
+            String fecha_con, String descripcion) {
+
+        NOMBRE_EMP = nombre;
+        APELLIDO_EMP = apellidos;
+        CI_EMP = ci;
+        PAIS_EMP = id_pais;
+        DIRECCION_EMP = direccion;
+        
+        ID_CARGO_CONT = id_cargo;
+        SALARIO_CONT = salario;
+        FECHAINI_CONT = fecha_ini;
+        FECHAFIN_CONT = fecha_fin;
+        FECHAACT_CONT = fecha_con;
+        DESCRIPCION_CONT = descripcion;
+    }
     
-    }  
-    
-    
+    private void reconocerCampos(){
+        
+    NOMBRE_EMP = jTextField1.getText();
+        APELLIDO_EMP = jTextField2.getText();
+        CI_EMP = jTextField9.getText();
+        PAIS_EMP = lsPais.get(jComboBox1.getSelectedIndex());
+        DIRECCION_EMP = jTextField3.getText();
+        
+        ID_CARGO_CONT = lsCargo.get(jComboBox2.getSelectedIndex());
+        SALARIO_CONT = Integer.valueOf(jTextField4.getText());
+        FECHAINI_CONT = jTextField5.getText();
+        FECHAFIN_CONT = jTextField6.getText();
+        FECHAACT_CONT = jTextField7.getText();
+        DESCRIPCION_CONT = jTextField8.getText();
+    }
+
 }

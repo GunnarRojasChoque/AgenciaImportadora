@@ -14,7 +14,7 @@ public class Conexion {
     private String nombreDB="AgenciaImportadora";
     private String url="jdbc:postgresql://localhost:5432/"+nombreDB;
     private String user="postgres";
-    private String password="root";
+    private String password="rojas";
     
     private Connection con;
     Statement st;
