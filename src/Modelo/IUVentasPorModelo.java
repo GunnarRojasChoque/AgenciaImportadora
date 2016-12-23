@@ -7,6 +7,7 @@ package Modelo;
 
 import agenciasisii.Conexion;
 import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -23,6 +24,7 @@ public class IUVentasPorModelo extends javax.swing.JFrame {
         conexion = new Conexion();
         conexion.conectar();
         llenarComboboxModelo();
+        setDefaultCloseOperation(HIDE_ON_CLOSE);
     }
 
     /**
@@ -84,7 +86,8 @@ public class IUVentasPorModelo extends javax.swing.JFrame {
         String nom = jComboBox1.getSelectedItem().toString();
         System.out.println(nom);
         res = v.ventasPorModelo(nom);
-        //System.out.println(res);
+        JOptionPane.showMessageDialog(null,"\n" + "La Cantidad de Ventas realizadas del modelo "+nom+" es:  "+ res,
+                "Prueba Exitosa", JOptionPane.INFORMATION_MESSAGE);
 
     }//GEN-LAST:event_mostrarMouseClicked
 

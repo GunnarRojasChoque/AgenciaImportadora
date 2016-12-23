@@ -30,6 +30,7 @@ public class IUVenta extends javax.swing.JFrame {
         conexion = new Conexion();
         conexion.conectar();
         llenarComboboxEmpleado();
+        setDefaultCloseOperation(HIDE_ON_CLOSE);
     }
 
     /**
