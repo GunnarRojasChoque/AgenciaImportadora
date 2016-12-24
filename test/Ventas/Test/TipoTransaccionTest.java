@@ -19,7 +19,13 @@ public class TipoTransaccionTest {
 
     @Test
     public void testSomeMethod() {
-        
+           int transaccionCredito=1;
+           int transaccionEfectivo=2;
+        if(transaccionCredito == 1){
+           TipoTransaccion tipo =new TipoTransaccion(1);
+        }else{
+            TipoTransaccion tipo =new TipoTransaccion(2);
+            }
     }
     
 }
