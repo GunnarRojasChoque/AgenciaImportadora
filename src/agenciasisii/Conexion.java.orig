@@ -11,19 +11,18 @@ import java.util.logging.Logger;
 public class Conexion {
     
     private String driver="org.postgresql.Driver";
-    private String nombreDB="AgenciaImportadora1";
+    private String nombreDB="AgenciaImportadora";
     private String url="jdbc:postgresql://localhost:5432/"+nombreDB;
 
-
-    private String user="alecita";
-    private String password="alecita";
-    //private String user="postgres";
-    //private String password="root";
-
-
+    private String user="singular";
+    private String password="plural";
     private String user="postgres";
+<<<<<<< HEAD
     private String password="rojas";
+=======
+    private String password="root";
 
+>>>>>>> abe3241ca892662c4f3569e0ca7a14efb2748ce7
     
     private Connection con;
     Statement st;
