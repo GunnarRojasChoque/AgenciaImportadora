@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Modelo;
+package Ventas;
 
 /**
  *
  * @author Max
  */
-import Modelo.TipoTransaccion;
+import Ventas.TipoTransaccion;
 public class IUVentaCredito extends javax.swing.JFrame {
 
     /**
